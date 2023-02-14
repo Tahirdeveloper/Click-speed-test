@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click speed test</title>
+    <style>
+        #main {
+            margin: 0px auto;
+            width: 350px;
+            height: 350px;
+            border: 2px solid black;
+            padding: 10px;
+        }
+
+        button {
+            background-color: blue;
+            color: white;
+            border: 1px solid darkred;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+           margin: 10px;
+
+        }
+
+        #container {
+            width: 250px;
+            height: 230px;
+            border: 1px solid darkred;
+            padding: 10px;
+            margin: 0 auto;
+
+        }
+
+        span {
+          font-size: 18px;
+          text-align: center;
+        }
+
+        .box{
+            width: 30px;
+            height: 30px;
+            border: 1px solid;
+            border-radius:8px;
+            background-color: blue;
+            color: white;
+            float: left;
+            margin:2px auto;
+            padding:5px;
+            line-height: 30px;
+            text-align: center;
+            margin-left: 7px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <h3 id="msg"></h3>
+        <button id="restart">Restart</button>
+        <span> Next number:</span>
+        <span id="next">1,</span>
+        Time:<span id="min"> 00:</span><span id="sec">00:</span><span id="mili">000</span>
+        <div id="container"></div>
+    </div>
+<script src="jquery.js"></script>
+<script>
+
+function generateArray(min,max){
+    let myArray=[];
+    for(let j=min; j<=max; j++){
+        myArray.push(j);
+    }
+    return  myArray;
+}
+
+   function divGenerator(){
+    for(let i=1;i<=25;i++){
+
+        $("#container").append("<div class='box'></div>");
+       
+        
+    }
+}
+
+divGenerator();
+let Array1=generateArray(1,25);
+// let Array2=generateArray(26,50);
+let currentNum=1;
+$(".box").each(function(index,elem){
+    let randomNum=Math.floor(Math.random()*Array1.length);
+    $(elem).html(Array1.splice(randomNum,1));
+});
+
+clickBox();
+function TimeTaken()
+{
+           
+}
+function clickBox()
+{
+    let time=Date.now();
+        $(".box").click(function(){
+        if($(this).text()==currentNum){
+            // let randomNum2=Math.floor(Math.random()*Array2.length);
+            // $(this).html(Array2.splice(randomNum2,1));
+            $(this).html("");
+
+            currentNum++;
+            $("#next").text(currentNum+",");
+           
+        } 
+       
+           
+        let interval= setInterval(function(){
+            var second;
+            var mins;
+            var ms;
+          let gap=Date.now()-time;
+             ms=gap;
+          if(ms>1000)
+          {
+              ms%=1000;  
+          }
+              second=Math.floor(gap/1000);
+              if(second>59)
+              {
+               second%=60;
+               }
+            mins=Math.floor(gap/1000/60); 
+         if(mins<10){
+          $("#min").text("0"+mins+":");
+         }
+         else{
+          $("#min").text(mins+":");
+         }
+          
+         if(second<10)
+         {
+          $("#sec").text("0"+second+":");
+         }
+         else{
+          $("#sec").text(second+":");
+         }
+           $("#mili").text(ms);
+           
+         
+           if(currentNum-1==25){
+
+            $("#msg").text("You completed in: "+mins+" min:"+second+" sec :  time!");
+                clearInterval(interval);
+            }
+         },100);
+         
+        
+
+       $("#restart").click(function(){
+        $("#sec").text("00: ");
+        clearInterval(interval);
+        $("#mili").text(" 00");
+       
+
+        let Array1=generateArray(1,25);
+        let Array2=generateArray(26,50);
+        let currentNum=1;
+        $(".box").each(function(index,elem){
+            let randomNum=Math.floor(Math.random()*Array1.length);
+         $(elem).html(Array1.splice(randomNum,1));
+         $("#next").text("1,");
+         });
+    });
+    });
+    }
+   
+
+   
+</script>
+</body>
+
+</html>
